@@ -164,6 +164,11 @@ jobs:
       env:
         ACTIONS_RUNTIME_TOKEN: ''
         ACTIONS_RESULTS_URL: ''
+    - name: Report compile errors as annotations
+      if: ${{ failure() }}
+      shell: bash
+      run: |
+        grep -E "error[: ]|Error [0-9]" build/diagnostics/compile.log | head -40 | while IFS= read -r line; do echo "::error::${line:0:900}"; done || true
     - name: Initialize isolated test database
       shell: bash
       env:
