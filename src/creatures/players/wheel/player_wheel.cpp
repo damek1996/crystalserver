@@ -294,17 +294,39 @@ const static std::unordered_map<uint8_t, std::reference_wrapper<const std::vecto
 // To avoid conflict in other files that might use a function with the same name
 // Here are built-in helper functions
 namespace {
+	// Table entries named "Any_*" stand for a group of real spells.
+	bool wheelSpellNameMatches(const std::string &tableName, const std::string &spellName) {
+		if (tableName == spellName) {
+			return true;
+		}
+		const auto contains = [&spellName](const std::vector<std::string> &list) {
+			return std::ranges::find(list, spellName) != list.end();
+		};
+		if (tableName == "Any_Forked_Spell") {
+			return contains(g_game().getIOWheel()->getForkedSpells());
+		}
+		if (tableName == "Any_Special_Mage_Spell") {
+			return contains(g_game().getIOWheel()->getSpecialSpells());
+		}
+		if (tableName == "Any_Focus_Mage_Spell") {
+			return contains(g_game().getIOWheel()->getFocusSpells());
+		}
+		return false;
+	}
+
 	template <typename SpellType>
 	bool checkSpellArea(const std::array<SpellType, 5> &spellsTable, const std::string &spellName, uint8_t stage) {
 		for (const auto &spellTable : spellsTable) {
 			auto size = std::ssize(spellTable.grade);
 			g_logger().debug("spell area stage {}, grade {}", stage, size);
-			if (spellTable.name == spellName && stage < static_cast<uint8_t>(size)) {
-				const auto &spellData = spellTable.grade[stage];
-				if (spellData.increase.area) {
-					g_logger().debug("[{}] spell with name {}, and stage {} has increase area", __FUNCTION__, spellName, stage);
-
-					return true;
+			if (wheelSpellNameMatches(spellTable.name, spellName)) {
+				// Upgrades are cumulative: an area increase granted at any grade up to the current stage applies.
+				const auto maxGrade = std::min<int>(stage, static_cast<int>(size) - 1);
+				for (int grade = 1; grade <= maxGrade; ++grade) {
+					if (spellTable.grade[grade].increase.area) {
+						g_logger().debug("[{}] spell with name {}, and stage {} has increase area (from grade {})", __FUNCTION__, spellName, stage, grade);
+						return true;
+					}
 				}
 			}
 		}
@@ -317,10 +339,16 @@ namespace {
 		for (const auto &spellTable : spellsTable) {
 			auto size = std::ssize(spellTable.grade);
 			g_logger().debug("spell target stage {}, grade {}", stage, size);
-			if (spellTable.name == spellName && stage < static_cast<uint8_t>(size)) {
-				const auto &spellData = spellTable.grade[stage];
-				if (spellData.increase.aditionalTarget) {
-					return spellData.increase.aditionalTarget;
+			if (wheelSpellNameMatches(spellTable.name, spellName)) {
+				// Upgrades are cumulative: extra targets from every grade up to the current stage add up
+				// (e.g. Chained Penance I +1 and II +1 = +2).
+				int best = 0;
+				const auto maxGrade = std::min<int>(stage, static_cast<int>(size) - 1);
+				for (int grade = 1; grade <= maxGrade; ++grade) {
+					best += spellTable.grade[grade].increase.aditionalTarget;
+				}
+				if (best > 0) {
+					return best;
 				}
 			}
 		}
@@ -333,10 +361,15 @@ namespace {
 		for (const auto &spellTable : spellsTable) {
 			auto size = std::ssize(spellTable.grade);
 			g_logger().debug("spell duration stage {}, grade {}", stage, size);
-			if (spellTable.name == spellName && stage < static_cast<uint8_t>(size)) {
-				const auto &spellData = spellTable.grade[stage];
-				if (spellData.increase.duration > 0) {
-					return spellData.increase.duration;
+			if (wheelSpellNameMatches(spellTable.name, spellName)) {
+				// Upgrades are cumulative: duration bonuses from every grade up to the current stage add up.
+				int best = 0;
+				const auto maxGrade = std::min<int>(stage, static_cast<int>(size) - 1);
+				for (int grade = 1; grade <= maxGrade; ++grade) {
+					best += spellTable.grade[grade].increase.duration;
+				}
+				if (best > 0) {
+					return best;
 				}
 			}
 		}

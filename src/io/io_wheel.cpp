@@ -219,6 +219,14 @@ const IOWheelBonusData::DataArray &IOWheel::getWheelBonusData() const {
 	return m_wheelBonusData;
 }
 
+const std::vector<std::string> &IOWheel::getForkedSpells() const {
+	return InternalPlayerWheel::m_forkedSpells;
+}
+
+const std::vector<std::string> &IOWheel::getSpecialSpells() const {
+	return InternalPlayerWheel::m_specialSpells;
+}
+
 const std::vector<std::string> &IOWheel::getFocusSpells() const {
 	return InternalPlayerWheel::m_focusSpells;
 }
@@ -409,6 +417,20 @@ bool IOWheel::isMonk(uint8_t vocationId) const {
 
 void IOWheel::addSpellAugmented(const std::shared_ptr<Player> &player, PlayerWheelMethodsBonusData &bonusData, WheelSlots_t slotType, uint16_t points, const std::string &spellName) const {
 	if (isMaxPointAddedToSlot(player, points, slotType)) {
+		// Group augments ("Any_*") must grade the real spells, otherwise the player never gets
+		// the upgrade (cooldown, damage, extra targets) on Forked/Strike spells.
+		if (spellName == "Any_Forked_Spell") {
+			for (const auto &name : InternalPlayerWheel::m_forkedSpells) {
+				bonusData.spells.push_back(name);
+			}
+			return;
+		}
+		if (spellName == "Any_Special_Mage_Spell") {
+			for (const auto &name : InternalPlayerWheel::m_specialSpells) {
+				bonusData.spells.push_back(name);
+			}
+			return;
+		}
 		bonusData.spells.push_back(spellName);
 	}
 }

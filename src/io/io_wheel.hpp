@@ -142,6 +142,8 @@ public:
 	 * @details It returns a const reference to this vector, allowing read-only access to the focus spells.
 	 */
 	const std::vector<std::string> &getFocusSpells() const;
+	const std::vector<std::string> &getForkedSpells() const;
+	const std::vector<std::string> &getSpecialSpells() const;
 
 	using VocationBonusFunction = std::function<void(const std::shared_ptr<Player> &, uint16_t, uint8_t, PlayerWheelMethodsBonusData &)>;
 	using VocationBonusMap = std::map<WheelSlots_t, VocationBonusFunction>;
