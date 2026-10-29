@@ -7579,7 +7579,7 @@ int32_t Player::getSpecializedMagicLevel(CombatType_t combat, bool useCharges) c
 	// Vocation Adjustment: Paladin Divine Defiance grants 7.5% of distance fighting as bonus
 	// holy AND healing magic level (one hook feeds both the native formula and the Lua callback).
 	if (getStance() == STANCE_DIVINE_DEFIANCE && (combat == COMBAT_HOLYDAMAGE || combat == COMBAT_HEALING)) {
-		result += static_cast<int32_t>(getSkillLevel(SKILL_DISTANCE) * 0.075);
+		result += static_cast<int32_t>(getSkillLevel(SKILL_DISTANCE) * 0.06); // balance: 7.5% -> 6%
 	}
 
 	// Vocation Adjustment: Druid Elemental Synthesis grants 10% of magic level as bonus ice

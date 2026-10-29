@@ -337,12 +337,12 @@ void IOWheel::initializePaladinSpells() {
 	m_wheelBonusData.spells.paladin[2].grade[2].decrease.cooldown = 8; // II -8s cd (was -4s)
 
 	m_wheelBonusData.spells.paladin[3].name = "Divine Barrage"; // Vocation Adjustment: replaces Swift Foot
-	m_wheelBonusData.spells.paladin[3].grade[1].increase.damage = 10; // I +10% base damage
-	m_wheelBonusData.spells.paladin[3].grade[2].increase.damage = 15; // II +15% base damage
+	m_wheelBonusData.spells.paladin[3].grade[1].increase.damage = 8; // I +8% base damage (balance: 10 -> 8)
+	m_wheelBonusData.spells.paladin[3].grade[2].increase.damage = 12; // II +12% base damage (balance: 15 -> 12)
 
 	m_wheelBonusData.spells.paladin[4].name = "Divine Caldera";
 	m_wheelBonusData.spells.paladin[4].grade[1].decrease.manaCost = 20;
-	m_wheelBonusData.spells.paladin[4].grade[2].increase.damage = static_cast<int>(std::round(8.5));
+	m_wheelBonusData.spells.paladin[4].grade[2].increase.damage = 10; // balance: 8.5 -> 10
 }
 
 void IOWheel::initializeSorcererSpells() {

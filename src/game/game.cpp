@@ -7240,7 +7240,7 @@ bool Game::combatBlockHit(CombatDamage &damage, const std::shared_ptr<Creature> 
 		const Position &ap = attacker->getPosition();
 		const Position &tp = targetPlayer->getPosition();
 		const bool nonAdjacent = Position::getDistanceZ(ap, tp) != 0 || Position::getDistanceX(ap, tp) > 1 || Position::getDistanceY(ap, tp) > 1;
-		if (nonAdjacent && uniform_random(0, 10000) < 1500) {
+		if (nonAdjacent && uniform_random(0, 10000) < 1200) { // Divine Defiance dodge 15% -> 12%
 			InternalGame::sendBlockEffect(BLOCK_DODGE, damage.primary.type, target->getPosition(), attacker);
 			targetPlayer->sendTextMessage(MESSAGE_ATTENTION, "You dodged an attack.");
 			return true;
