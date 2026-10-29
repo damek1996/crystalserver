@@ -131,7 +131,12 @@ local spell = Spell("instant")
 
 function spell.onCastSpell(creature, var)
 	local maxTargets = 5
-	maxTargets = maxTargets + creature:getWheelSpellAdditionalTarget("Chained Penance") or 0
+	-- augment I i II: po +1 celu (stary exe na stopniu II dawał tylko +1 zamiast +2)
+	local extraTargets = creature:getWheelSpellAdditionalTarget("Chained Penance") or 0
+	if WheelCompat then
+		extraTargets = math.max(extraTargets, WheelCompat.grade(creature, "Chained Penance"))
+	end
+	maxTargets = maxTargets + extraTargets
 
 	local legsItem = creature:getSlotItem(CONST_SLOT_LEGS)
 	if legsItem and legsItem:getId() == 50146 then -- Sanguine Trousers

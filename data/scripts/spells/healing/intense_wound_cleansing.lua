@@ -6,7 +6,9 @@ combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 -- Vocation Adjustment: base power 500, scales with magic level + shielding.
 function onGetFormulaValues(player, level, magicLevel, basePower)
-	return calculateKnightHealing(player, magicLevel, basePower, 20.0, 40.0, 5.0, 2)
+	local min, max = calculateKnightHealing(player, magicLevel, basePower, 20.0, 40.0, 5.0, 2)
+	local s = WheelCompat and WheelCompat.knightHealScale(player) or 1
+	return min * s, max * s
 end
 
 combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")

@@ -20,15 +20,17 @@ local DEATH_ECHO_AREA = {
 -- Base power 85. Formula mirrors the project's death-AoE idioms (great_death_beam
 -- / death_strike) scaled to an 85 base spell.
 function onGetDeathEchoValues(player, level, maglevel)
-	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 2.4)) * BASE_SCALE
-	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 3.6)) * BASE_SCALE
+	local s = WheelCompat and WheelCompat.scale(player, "Death Echo", { [2] = { 8, 12 } }) or 1 -- augment II 8% -> 12%
+	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 2.4)) * BASE_SCALE * s
+	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 3.6)) * BASE_SCALE * s
 	return -min, -max
 end
 
 -- Echo hit deals 50% of the initial damage (halved formula).
 function onGetDeathEchoEchoValues(player, level, maglevel)
-	local min = (((calculateBaseDamageHealing(level)) + (maglevel * 2.4)) * BASE_SCALE) * 0.5
-	local max = (((calculateBaseDamageHealing(level)) + (maglevel * 3.6)) * BASE_SCALE) * 0.5
+	local s = WheelCompat and WheelCompat.scale(player, "Death Echo", { [2] = { 8, 12 } }) or 1
+	local min = (((calculateBaseDamageHealing(level)) + (maglevel * 2.4)) * BASE_SCALE) * 0.5 * s
+	local max = (((calculateBaseDamageHealing(level)) + (maglevel * 3.6)) * BASE_SCALE) * 0.5 * s
 	return -min, -max
 end
 

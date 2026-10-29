@@ -7,7 +7,11 @@ combat:setArea(createCombatArea(AREA_CIRCLE2X2))
 
 function onGetFormulaValues(player, skill, attack, factor, basePower)
 	local avg = spellSkillDamage(basePower, player:getLevel(), skill, attack)
-	return -math.floor(avg * 0.9), -math.ceil(avg * 1.1)
+	local min, max = -math.floor(avg * 0.9), -math.ceil(avg * 1.1)
+	if WheelCompat then -- augment II: +10% szansy na kryta (stary exe dawał +0,1%)
+		min, max = WheelCompat.extraCrit(player, "Ethereal Barrage", 2, 10, min, max)
+	end
+	return min, max
 end
 
 combat:setCallback(CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValues")

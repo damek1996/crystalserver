@@ -6,7 +6,9 @@ combat:setArea(createCombatArea(AREA_CIRCLE2X2))
 
 function onGetFormulaValues(player, level, maglevel, basePower)
 	local min, max = calculateMagicSpellDamage(level, maglevel, basePower)
-	return -min, -max
+	-- augment I/II: 10/15% -> 8/12% (łącznie 10 -> 8, 25 -> 20); korekta tylko na starym exe
+	local s = WheelCompat and WheelCompat.scale(player, "Divine Barrage", { [1] = { 10, 8 }, [2] = { 25, 20 } }) or 1
+	return -min * s, -max * s
 end
 
 combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")

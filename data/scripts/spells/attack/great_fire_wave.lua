@@ -11,14 +11,24 @@ end
 
 -- Each combat needs its OWN callback name (won't let two combats share a callback name); all
 -- delegate to the same formula.
+local function withWheelCrit(player, min, max)
+	if WheelCompat then -- augment I: +10% szansy na kryta (stary exe dawał +0,1%)
+		return WheelCompat.extraCrit(player, "Great Fire Wave", 1, 10, min, max)
+	end
+	return min, max
+end
+
 function onGetFormulaValues(player, level, maglevel, basePower)
-	return fireWaveFormula(level, maglevel)
+	local min, max = fireWaveFormula(level, maglevel)
+	return withWheelCrit(player, min, max)
 end
 function onGetFormulaValuesThunder(player, level, maglevel)
-	return fireWaveFormula(level, maglevel)
+	local min, max = fireWaveFormula(level, maglevel)
+	return withWheelCrit(player, min, max)
 end
 function onGetFormulaValuesDecay(player, level, maglevel)
-	return fireWaveFormula(level, maglevel)
+	local min, max = fireWaveFormula(level, maglevel)
+	return withWheelCrit(player, min, max)
 end
 
 local area = createCombatArea(AREA_WAVE7, AREADIAGONAL_WAVE7)

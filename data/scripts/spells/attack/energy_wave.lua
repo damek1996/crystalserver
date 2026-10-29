@@ -63,7 +63,7 @@ function spell.onCastSpell(creature, var)
 	local player = creature:getPlayer()
 	if player then
 		local stance = player:getElementalStance()
-		local wod = player:getWheelSpellAdditionalArea("Energy Wave")
+		local wod = (player:getWheelSpellAdditionalArea("Energy Wave") or (WheelCompat and WheelCompat.grade(player, "Energy Wave") >= 1))
 		if stance == STANCE_MASTER_OF_FLAMES then
 			return (wod and combatFlamesWOD or combatFlames):execute(creature, var)
 		elseif stance == STANCE_MASTER_OF_DECAY then

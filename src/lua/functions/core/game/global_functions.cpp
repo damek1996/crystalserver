@@ -66,6 +66,8 @@ void GlobalFunctions::init(lua_State* L) {
 	lua_register(L, "stopEvent", GlobalFunctions::luaStopEvent);
 
 	Lua::registerGlobalVariable(L, "INDEX_WHEREEVER", INDEX_WHEREEVER);
+	// Marker for Lua scripts (data/scripts/lib/wheel_compat.lua): engine contains the 07.2026 wheel rebalance/fixes.
+	Lua::registerGlobalVariable(L, "WHEEL_ENGINE_REBALANCE", 202607);
 	Lua::registerGlobalBoolean(L, "VIRTUAL_PARENT", true);
 	Lua::registerGlobalMethod(L, "isType", GlobalFunctions::luaIsType);
 	Lua::registerGlobalMethod(L, "rawgetmetatable", GlobalFunctions::luaRawGetMetatable);

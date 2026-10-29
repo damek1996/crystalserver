@@ -7,7 +7,9 @@ function onGetFormulaValues(player, level, maglevel, basePower)
 	local levelBonus = calculateBaseDamageHealing(level)
 	local min = (levelBonus + maglevel * 4) * basePower / 140
 	local max = (levelBonus + maglevel * 6) * basePower / 140
-	return -math.floor(min), -math.floor(max)
+	-- augment II: 8.5% (stary exe zaokrągla do 9) -> 10%
+	local s = WheelCompat and WheelCompat.scale(player, "Divine Caldera", { [2] = { 9, 10 } }) or 1
+	return -math.floor(min * s), -math.floor(max * s)
 end
 
 combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")

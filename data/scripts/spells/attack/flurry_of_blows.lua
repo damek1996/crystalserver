@@ -81,7 +81,7 @@ local spell = Spell("instant")
 function spell.onCastSpell(creature, var)
 	local types = combatTypes
 	local player = creature:getPlayer()
-	if player and player:getWheelSpellAdditionalArea("Flurry of Blows") then
+	if player and (player:getWheelSpellAdditionalArea("Flurry of Blows") or (WheelCompat and WheelCompat.grade(player, "Flurry of Blows") >= 1)) then
 		types = combatTypesWOD
 	end
 
