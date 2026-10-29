@@ -295,7 +295,7 @@ const static std::unordered_map<uint8_t, std::reference_wrapper<const std::vecto
 // Here are built-in helper functions
 namespace {
 	// Table entries named "Any_*" stand for a group of real spells.
-	bool wheelSpellNameMatches(const std::string &tableName, const std::string &spellName) {
+	bool wheelSpellNameMatches(std::string_view tableName, std::string_view spellName) {
 		if (tableName == spellName) {
 			return true;
 		}

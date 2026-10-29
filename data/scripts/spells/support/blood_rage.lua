@@ -1,7 +1,7 @@
 local condition = Condition(CONDITION_ATTRIBUTES)
 condition:setParameter(CONDITION_PARAM_SUBID, AttrSubId_BloodRageProtector)
 condition:setParameter(CONDITION_PARAM_TICKS, -1)
-condition:setParameter(CONDITION_PARAM_SKILL_MELEEPERCENT, 130)
+condition:setParameter(CONDITION_PARAM_SKILL_MELEEPERCENT, 125) -- balance 07.2026: +30% -> +25%
 condition:setParameter(CONDITION_PARAM_BUFF_DAMAGERECEIVED, 115)
 condition:setParameter(CONDITION_PARAM_DISABLE_DEFENSE, true)
 condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)

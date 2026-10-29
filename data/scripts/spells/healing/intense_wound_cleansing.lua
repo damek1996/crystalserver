@@ -26,7 +26,7 @@ spell:id(158)
 spell:cooldown(120000) -- Vocation Adjustment: 10min -> 2min
 spell:groupCooldown(2 * 1000) -- Phase A rebalance: 1s -> 2s
 spell:level(80)
-spell:mana(200)
+spell:mana(300) -- balance 07.2026: 200 -> 300
 spell:isSelfTarget(true)
 spell:isAggressive(false)
 spell:isPremium(true)

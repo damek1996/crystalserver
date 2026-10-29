@@ -1,3 +1,4 @@
+local BASE_SCALE = 75 / 85 -- balance 07.2026: base damage 85 -> 75
 -- Death Echo (exevo mort ora) - Sorcerer attack spell, Vocation Adjustment
 -- Hits a 5x5 area at the target position for DEATH damage, then after a 1s
 -- delay the SAME area is struck again for 50% of the initial damage.
@@ -19,15 +20,15 @@ local DEATH_ECHO_AREA = {
 -- Base power 85. Formula mirrors the project's death-AoE idioms (great_death_beam
 -- / death_strike) scaled to an 85 base spell.
 function onGetDeathEchoValues(player, level, maglevel)
-	local min = (calculateBaseDamageHealing(level)) + (maglevel * 2.4)
-	local max = (calculateBaseDamageHealing(level)) + (maglevel * 3.6)
+	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 2.4)) * BASE_SCALE
+	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 3.6)) * BASE_SCALE
 	return -min, -max
 end
 
 -- Echo hit deals 50% of the initial damage (halved formula).
 function onGetDeathEchoEchoValues(player, level, maglevel)
-	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 2.4)) * 0.5
-	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 3.6)) * 0.5
+	local min = (((calculateBaseDamageHealing(level)) + (maglevel * 2.4)) * BASE_SCALE) * 0.5
+	local max = (((calculateBaseDamageHealing(level)) + (maglevel * 3.6)) * BASE_SCALE) * 0.5
 	return -min, -max
 end
 
@@ -105,7 +106,7 @@ spell:name("Death Echo")
 spell:words("exevo mort ora")
 spell:level(120)
 spell:mana(155)
-spell:basePower(85)
+spell:basePower(75) -- balance 07.2026: 85 -> 75
 spell:isPremium(true)
 spell:range(7)
 spell:needPosition(true) -- cast at the clicked tile (cursor/crosshair); var is VARIANT_POSITION

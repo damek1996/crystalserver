@@ -352,7 +352,7 @@ void IOWheel::initializeSorcererSpells() {
 
 	m_wheelBonusData.spells.sorcerer[1].name = "Death Echo"; // Vocation Adjustment: replaces Sap Strength
 	m_wheelBonusData.spells.sorcerer[1].grade[1].decrease.cooldown = 2; // I -2s cd
-	m_wheelBonusData.spells.sorcerer[1].grade[2].increase.damage = 8; // II +8% base damage
+	m_wheelBonusData.spells.sorcerer[1].grade[2].increase.damage = 12; // II +12% base damage (balance 07.2026: 8 -> 12)
 
 	m_wheelBonusData.spells.sorcerer[2].name = "Energy Wave";
 	m_wheelBonusData.spells.sorcerer[2].grade[1].increase.area = true; // Vocation Adjustment: I area enlarged (swapped)

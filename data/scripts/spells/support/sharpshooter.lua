@@ -1,7 +1,7 @@
 local condition = Condition(CONDITION_ATTRIBUTES)
 condition:setParameter(CONDITION_PARAM_SUBID, AttrSubId_Sharpshooter)
 condition:setParameter(CONDITION_PARAM_TICKS, -1)
-condition:setParameter(CONDITION_PARAM_SKILL_DISTANCEPERCENT, 140)
+condition:setParameter(CONDITION_PARAM_SKILL_DISTANCEPERCENT, 132) -- Vocation Adjustments Changes: +40% -> +32%
 condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 
 local combat = Combat()

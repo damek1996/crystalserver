@@ -1,6 +1,7 @@
+local BASE_SCALE = 155 / 170 -- balance 07.2026: base damage 170 -> 155
 local function formulaFunction(player, level, maglevel)
-	local min = (calculateBaseDamageHealing(level)) + (maglevel * 4)
-	local max = (calculateBaseDamageHealing(level)) + (maglevel * 7)
+	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 4)) * BASE_SCALE
+	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 7)) * BASE_SCALE
 	return -min, -max
 end
 
@@ -13,12 +14,12 @@ function onGetFormulaValuesWOD(player, level, maglevel)
 end
 
 -- Vocation Adjustment: Beam Mastery fires two identical beams parallel to the main one (left + right),
--- each dealing 40/60/80% of the beam damage at Beam Mastery stage 1/2/3 (length matches the combatWOD beam).
+-- each dealing 25/40/70% of the beam damage at Beam Mastery stage 1/2/3 (length matches the combatWOD beam).
 function onGetFormulaValuesBeamFlank(player, level, maglevel)
 	local stage = player:revelationStageWOD("Beam Mastery")
-	local factor = (stage >= 3 and 0.80) or (stage >= 2 and 0.60) or (stage >= 1 and 0.40) or 0
-	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 4)) * factor
-	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 7)) * factor
+	local factor = (stage >= 3 and 0.70) or (stage >= 2 and 0.40) or (stage >= 1 and 0.25) or 0 -- balance 07.2026: 40/60/80% -> 25/40/70%
+	local min = (((calculateBaseDamageHealing(level)) + (maglevel * 4)) * BASE_SCALE) * factor
+	local max = (((calculateBaseDamageHealing(level)) + (maglevel * 7)) * BASE_SCALE) * factor
 	return -min, -max
 end
 
@@ -79,7 +80,7 @@ spell:words("exevo gran vis lux")
 spell:castSound(SOUND_EFFECT_TYPE_SPELL_GREAT_ENERGY_BEAM)
 spell:level(29)
 spell:mana(110)
-spell:basePower(170)
+spell:basePower(155) -- balance 07.2026: 170 -> 155
 spell:isPremium(false)
 spell:needDirection(true)
 spell:blockWalls(true)

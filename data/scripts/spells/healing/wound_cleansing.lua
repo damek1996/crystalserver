@@ -26,7 +26,7 @@ spell:id(123)
 spell:cooldown(1 * 1000)
 spell:groupCooldown(2 * 1000) -- Phase A rebalance: 1s -> 2s
 spell:level(8)
-spell:mana(40)
+spell:mana(60) -- balance 07.2026: 40 -> 60
 spell:basePower(70)
 spell:isSelfTarget(true)
 spell:isAggressive(false)

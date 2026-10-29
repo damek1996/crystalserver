@@ -1,3 +1,4 @@
+local BASE_SCALE = 90 / 97 -- balance 07.2026: base damage 97 -> 90
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ICEDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, 324)
@@ -7,8 +8,8 @@ combat:setParameter(COMBAT_PARAM_CHAIN_EFFECT, CONST_ME_ICEATTACK)
 
 -- Base damage 97 (ML-scaled). Modeled on strong_ice_strike's formula curve.
 function onGetFormulaValues(player, level, maglevel, basePower)
-	local min = (calculateBaseDamageHealing(level)) + (maglevel * 2.4) + 14
-	local max = (calculateBaseDamageHealing(level)) + (maglevel * 3.8) + 24
+	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 2.4) + 14) * BASE_SCALE
+	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 3.8) + 24) * BASE_SCALE
 	return -math.floor(min), -math.floor(max)
 end
 
@@ -40,7 +41,7 @@ spell:castSound(SOUND_EFFECT_TYPE_SPELL_OR_RUNE)
 spell:impactSound(SOUND_EFFECT_TYPE_SPELL_STRONG_ICE_STRIKE)
 spell:level(90)
 spell:mana(180)
-spell:basePower(97)
+spell:basePower(90) -- balance 07.2026: 97 -> 90
 spell:isPremium(true)
 spell:range(7)
 spell:needTarget(false)

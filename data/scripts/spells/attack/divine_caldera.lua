@@ -25,7 +25,7 @@ spell:words("exevo mas san")
 spell:castSound(SOUND_EFFECT_TYPE_SPELL_DIVINE_CALDERA)
 spell:level(50)
 spell:mana(160)
-spell:basePower(160)
+spell:basePower(150) -- Vocation Adjustments Changes: 160 -> 150
 spell:isPremium(true)
 spell:isSelfTarget(true)
 spell:cooldown(4 * 1000)

@@ -6,6 +6,9 @@ combat:setArea(createCombatArea(AREA_SQUAREWAVE5, AREADIAGONAL_SQUAREWAVE5))
 function onGetFormulaValues(player, level, maglevel, basePower)
 	local min = (calculateBaseDamageHealing(level)) + (maglevel * 3.5)
 	local max = (calculateBaseDamageHealing(level)) + (maglevel * 7)
+	if SpellDebug and SpellDebug.report then
+		SpellDebug.report(player, "Terra Wave", level, maglevel, min, max)
+	end
 	return -min, -max
 end
 

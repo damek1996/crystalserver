@@ -7609,7 +7609,7 @@ void Game::applyWheelOfDestinyHealing(CombatDamage &damage, const std::shared_pt
 		// tripled to +30% while wearing a shield. Gated to spell/rune heals via instantSpellName
 		// so potions, Mana-Buffer / Gift-of-Life survive-heals and the healingLink echo are not boosted.
 		if ((!damage.instantSpellName.empty() || !damage.runeSpellName.empty()) && attackerPlayer->wheel()->getInstant("Battle Healing")) {
-			const double battleHealingFactor = attackerPlayer->hasRealShield() ? 1.30 : 1.10;
+			const double battleHealingFactor = attackerPlayer->hasRealShield() ? 1.20 : 1.10; // balance 07.2026: shield x3 -> x2
 			const int32_t primaryBeforeBattleHeal = damage.primary.value;
 			damage.primary.value = static_cast<int32_t>(std::round(damage.primary.value * battleHealingFactor));
 			const int32_t secondaryBeforeBattleHeal = damage.secondary.value;
@@ -7748,14 +7748,15 @@ int32_t Game::applyHealthChange(const CombatDamage &damage, const std::shared_pt
 		}
 
 		// Vocation Adjustment: Mana Buffer (Sorcerer + Druid). If incoming damage would exceed the
-		// current HP, the overkill is drained from mana x8 (plus 25% of max mana at most once per 2s)
+		// current HP, the overkill is drained from mana x10 (plus 25% of max mana at most once per 2s)
 		// and the player survives at 1 HP. If the mana cannot cover the cost, the player dies normally.
 		const auto &targetVocation = targetPlayer->getVocation();
 		if (targetVocation && (targetVocation->getBaseId() == VOCATION_SORCERER || targetVocation->getBaseId() == VOCATION_DRUID)
 		    && (damage.primary.value + damage.secondary.value) >= targetHealth) {
 			const int32_t overkill = (damage.primary.value + damage.secondary.value) - targetHealth + 1;
 			const bool taxReady = targetPlayer->getManaBufferTaxTime() <= OTSYS_TIME();
-			const int32_t manaCost = overkill * 8 + (taxReady ? static_cast<int32_t>(targetPlayer->getMaxMana() * 0.25) : 0);
+			const int32_t manaCost = overkill * 10 + // balance 07.2026: multiplier 8 -> 10
+			                        (taxReady ? static_cast<int32_t>(targetPlayer->getMaxMana() * 0.25) : 0);
 			if (manaCost > 0 && targetPlayer->getMana() >= static_cast<uint32_t>(manaCost)) {
 				CombatDamage manaDrain;
 				manaDrain.origin = ORIGIN_NONE;
@@ -8010,14 +8011,14 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature> &attacker, const s
 			damage.secondary.value *= target->getBuff(BUFF_DAMAGERECEIVED) / 100.;
 		}
 
-		// Vocation Adjustment: Combat Mastery (Knight wheel, reworked). Deal +1% damage per (12/10/8)%
+		// Vocation Adjustment: Combat Mastery (Knight wheel, reworked). Deal +1% damage per (14/12/10)%
 		// of the TARGET's missing HP (doubled with a two-handed weapon); take -1% per (12/10/8)% of
 		// OWN missing HP (doubled with a shield, reduction capped at 50%). Threshold 12/10/8 = stage 1/2/3.
 		if (damage.origin != ORIGIN_NONE && damage.primary.type != COMBAT_HEALING) {
 			if (attackerPlayer && target && target->getMaxHealth() > 0) {
 				const uint8_t stage = attackerPlayer->wheel()->getStage(WheelStage_t::COMBAT_MASTERY);
 				if (stage > 0) {
-					const int32_t threshold = stage >= 3 ? 8 : (stage >= 2 ? 10 : 12);
+					const int32_t threshold = stage >= 3 ? 10 : (stage >= 2 ? 12 : 14); // balance 07.2026: 12/10/8 -> 14/12/10
 					const int32_t targetMissingPct = ((target->getMaxHealth() - target->getHealth()) * 100) / target->getMaxHealth();
 					int32_t bonusPct = targetMissingPct / threshold;
 					const auto &weapon = attackerPlayer->getWeapon();
@@ -8033,7 +8034,7 @@ bool Game::combatChangeHealth(const std::shared_ptr<Creature> &attacker, const s
 			if (targetPlayer && targetPlayer->getMaxHealth() > 0) {
 				const uint8_t stage = targetPlayer->wheel()->getStage(WheelStage_t::COMBAT_MASTERY);
 				if (stage > 0) {
-					const int32_t threshold = stage >= 3 ? 8 : (stage >= 2 ? 10 : 12);
+					const int32_t threshold = stage >= 3 ? 10 : (stage >= 2 ? 12 : 14); // balance 07.2026: 12/10/8 -> 14/12/10
 					const int32_t ownMissingPct = ((targetPlayer->getMaxHealth() - targetPlayer->getHealth()) * 100) / targetPlayer->getMaxHealth();
 					int32_t reductionPct = ownMissingPct / threshold;
 					if (targetPlayer->hasRealShield()) {

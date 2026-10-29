@@ -1,6 +1,7 @@
+local BASE_SCALE = 155 / 170 -- balance 07.2026: base damage 170 -> 155
 local function formulaFunction(level, maglevel)
-	local min = (calculateBaseDamageHealing(level)) + (maglevel * 5.5)
-	local max = (calculateBaseDamageHealing(level)) + (maglevel * 9)
+	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 5.5)) * BASE_SCALE
+	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 9)) * BASE_SCALE
 	return -min, -max
 end
 
@@ -17,12 +18,12 @@ function onGetFormulaValuesGrade3(player, level, maglevel)
 end
 
 -- Vocation Adjustment: Beam Mastery fires two identical beams parallel to the main one (left + right),
--- each dealing 40/60/80% of the beam damage at Beam Mastery stage 1/2/3.
+-- each dealing 25/40/70% of the beam damage at Beam Mastery stage 1/2/3.
 local function flankFormula(player, level, maglevel)
 	local stage = player:revelationStageWOD("Beam Mastery")
-	local factor = (stage >= 3 and 0.80) or (stage >= 2 and 0.60) or (stage >= 1 and 0.40) or 0
-	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 5.5)) * factor
-	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 9)) * factor
+	local factor = (stage >= 3 and 0.70) or (stage >= 2 and 0.40) or (stage >= 1 and 0.25) or 0 -- balance 07.2026: 40/60/80% -> 25/40/70%
+	local min = (((calculateBaseDamageHealing(level)) + (maglevel * 5.5)) * BASE_SCALE) * factor
+	local max = (((calculateBaseDamageHealing(level)) + (maglevel * 9)) * BASE_SCALE) * factor
 	return -min, -max
 end
 function onGetFormulaValuesBeamFlank1(player, level, maglevel)
@@ -106,7 +107,7 @@ spell:name("Great Death Beam")
 spell:words("exevo max mort")
 spell:level(66)
 spell:mana(140)
-spell:basePower(170)
+spell:basePower(155) -- balance 07.2026: 170 -> 155
 spell:isPremium(false)
 spell:needDirection(true)
 spell:blockWalls(true)

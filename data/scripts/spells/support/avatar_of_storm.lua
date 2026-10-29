@@ -10,7 +10,7 @@ function spell.onCastSpell(creature, variant)
 
 	local grade = creature:revelationStageWOD("Avatar of Storm")
 	if grade == 0 then
-		creature:sendCancelMessage("You cannot cast this spell")
+		creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Avatar of Storm: brak rewelacji w kole. Potrzebujesz co najmniej 250 punktow w domenie z Avatarem (1. stopien rewelacji).")
 		creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
@@ -21,6 +21,8 @@ function spell.onCastSpell(creature, variant)
 	creature:addCondition(condition)
 	creature:avatarTimer((os.time() * 1000) + duration)
 	creature:reloadData()
+	local reduction = (grade >= 3 and 15) or (grade >= 2 and 10) or 5
+	creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Avatar of Storm (stopien %d): przez 15 s kazdy atak jest krytyczny, +%d%% obrazen krytycznych, -%d%% otrzymywanych obrazen.", grade, reduction, reduction))
 
 	addEvent(function(cid)
 		local c = Creature(cid)

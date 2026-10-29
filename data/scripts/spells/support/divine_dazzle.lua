@@ -18,7 +18,13 @@ function getChainValue(creature)
 	local targets = 3
 	local player = creature:getPlayer()
 	if creature and player then
-		targets = targets + player:getWheelSpellAdditionalTarget("Divine Dazzle")
+		local extra = player:getWheelSpellAdditionalTarget("Divine Dazzle")
+		-- POPRAWKA: silnik przy stopniu II czyta tylko dane stopnia II (0 celów) i gubi +2 cele ze
+		-- stopnia I. Stopień II rozpoznajemy po bonusie czasu trwania (+4 s), który daje tylko on.
+		if extra == 0 and player:getWheelSpellAdditionalDuration("Divine Dazzle") > 0 then
+			extra = 2
+		end
+		targets = targets + extra
 	end
 	return targets, 7, false
 end

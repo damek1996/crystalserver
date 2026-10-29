@@ -1,3 +1,4 @@
+local BASE_SCALE = 97 / 105 -- balance 07.2026: base damage 105 -> 97
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_EARTHDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, 325)
@@ -7,8 +8,8 @@ combat:setParameter(COMBAT_PARAM_CHAIN_EFFECT, CONST_ME_CARNIPHILA)
 
 -- Base damage 105 (ML-scaled). Modeled on strong_terra_strike's formula curve.
 function onGetFormulaValues(player, level, maglevel, basePower)
-	local min = (calculateBaseDamageHealing(level)) + (maglevel * 2.6) + 16
-	local max = (calculateBaseDamageHealing(level)) + (maglevel * 4.1) + 26
+	local min = ((calculateBaseDamageHealing(level)) + (maglevel * 2.6) + 16) * BASE_SCALE
+	local max = ((calculateBaseDamageHealing(level)) + (maglevel * 4.1) + 26) * BASE_SCALE
 	return -math.floor(min), -math.floor(max)
 end
 
@@ -40,7 +41,7 @@ spell:castSound(SOUND_EFFECT_TYPE_SPELL_OR_RUNE)
 spell:impactSound(SOUND_EFFECT_TYPE_SPELL_STRONG_TERRA_STRIKE)
 spell:level(80)
 spell:mana(180)
-spell:basePower(105)
+spell:basePower(97) -- balance 07.2026: 105 -> 97
 spell:isPremium(true)
 spell:range(7)
 spell:needTarget(false)

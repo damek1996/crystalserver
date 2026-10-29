@@ -16,7 +16,7 @@ local function creatureArrayListChain(startCreatureId, maxTargets)
 		local bestMonsterId = nil
 		local bestPathLength = math.huge
 		local bestHealthPercent = -1
-		local range = 3 -- Vocation Adjustment: jump range +1 (2 -> 3); chains to the closest target
+		local range = (#creaturesArray == 0) and 4 or 3 -- first hop from the monk radius 4 (balance 07.2026), then jumps of 3
 
 		local spectators = Game.getSpectators(currentCreature:getPosition(), false, false, range, range, range, range)
 		for _, candidate in ipairs(spectators) do
